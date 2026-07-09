@@ -15,6 +15,9 @@ catalogs:
     eslint:
       specifier: ^9.39.4
       version: 9.39.4
+    graphql:
+      specifier: ^16.12.0
+      version: 16.14.2
     tsx:
       specifier: ^4.22.4
       version: 4.23.0
@@ -93,6 +96,97 @@ importers:
         specifier: workspace:*
         version: link:../workspace-config
 
+  packages/importers/cli-2-agent-skills:
+    dependencies:
+      '@quickdeployai/skill-registry-schemas':
+        specifier: workspace:*
+        version: link:../../schemas/skill-registry-schemas
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      '@quickdeployai/agent-skills-registry-workspace-config':
+        specifier: workspace:*
+        version: link:../../core/workspace-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@24.13.3)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/importers/docs-2-agent-skills:
+    dependencies:
+      '@quickdeployai/skill-registry-schemas':
+        specifier: workspace:*
+        version: link:../../schemas/skill-registry-schemas
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      '@quickdeployai/agent-skills-registry-workspace-config':
+        specifier: workspace:*
+        version: link:../../core/workspace-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@24.13.3)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/importers/graphql-2-agent-skills:
+    dependencies:
+      '@quickdeployai/skill-registry-schemas':
+        specifier: workspace:*
+        version: link:../../schemas/skill-registry-schemas
+      graphql:
+        specifier: 'catalog:'
+        version: 16.14.2
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      '@quickdeployai/agent-skills-registry-workspace-config':
+        specifier: workspace:*
+        version: link:../../core/workspace-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@24.13.3)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/importers/openapi-2-agent-skills:
+    dependencies:
+      '@quickdeployai/skill-registry-schemas':
+        specifier: workspace:*
+        version: link:../../schemas/skill-registry-schemas
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      '@quickdeployai/agent-skills-registry-workspace-config':
+        specifier: workspace:*
+        version: link:../../core/workspace-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@24.13.3)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+
   packages/schemas/skill-registry-schemas:
     dependencies:
       zod:
@@ -114,6 +208,18 @@ importers:
 
   packages/tools/skills-cli:
     dependencies:
+      '@quickdeployai/cli-2-agent-skills':
+        specifier: workspace:*
+        version: link:../../importers/cli-2-agent-skills
+      '@quickdeployai/docs-2-agent-skills':
+        specifier: workspace:*
+        version: link:../../importers/docs-2-agent-skills
+      '@quickdeployai/graphql-2-agent-skills':
+        specifier: workspace:*
+        version: link:../../importers/graphql-2-agent-skills
+      '@quickdeployai/openapi-2-agent-skills':
+        specifier: workspace:*
+        version: link:../../importers/openapi-2-agent-skills
       '@quickdeployai/skill-core':
         specifier: workspace:*
         version: link:../../core/skill-core
@@ -807,6 +913,10 @@ packages:
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
+
+  graphql@16.14.2:
+    resolution: {integrity: sha512-Chq1s4CY7jmh8gO2qvLIJyfCDIN+EHLFW/9iShnp1z8FjBQMoodWP1kDC36VAMXXIvAjj4ARa7ntfAV2BrjsbA==}
+    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -1819,6 +1929,8 @@ snapshots:
       is-glob: 4.0.3
 
   globals@14.0.0: {}
+
+  graphql@16.14.2: {}
 
   has-flag@4.0.0: {}
 

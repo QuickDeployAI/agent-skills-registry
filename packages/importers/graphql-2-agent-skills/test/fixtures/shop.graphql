@@ -1,0 +1,38 @@
+"""A product in the store catalog."""
+type Product {
+  id: ID!
+  title: String!
+  totalInventory: Int
+}
+
+type Order {
+  id: ID!
+  name: String!
+  displayFulfillmentStatus: String!
+}
+
+input ProductUpdateInput {
+  id: ID!
+  title: String
+}
+
+type ProductUpdatePayload {
+  product: Product
+  userErrors: [String!]!
+}
+
+type Query {
+  """Look up a product by ID."""
+  product(id: ID!): Product
+
+  """List orders, most recent first."""
+  orders(first: Int!, query: String): [Order!]!
+}
+
+type Mutation {
+  """Update product attributes such as title."""
+  productUpdate(input: ProductUpdateInput!): ProductUpdatePayload
+
+  """Cancel an order."""
+  orderCancel(orderId: ID!, reason: String): ProductUpdatePayload
+}

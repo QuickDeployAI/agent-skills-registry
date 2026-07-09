@@ -1,6 +1,10 @@
+import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { loadSkillDir, validateSkillAgainstManifest } from "@quickdeployai/skill-core";
-import { QUICKDEPLOY_SKILL_NAME_PREFIX } from "@quickdeployai/skill-registry-schemas";
+import { loadSkillDir, validateSkillAgainstManifest, type LoadedSkill } from "@quickdeployai/skill-core";
+import {
+  QUICKDEPLOY_SKILL_NAME_PREFIX,
+  SKILL_REQUIRES_META_KEY,
+} from "@quickdeployai/skill-registry-schemas";
 import { discoverRegistrySources } from "./registry-discovery.js";
 
 export type RegistryValidationCode =
@@ -8,7 +12,9 @@ export type RegistryValidationCode =
   | "name-namespace-mismatch"
   | "duplicate-name"
   | "missing-skill-directory"
-  | "skill-content-mismatch";
+  | "skill-content-mismatch"
+  | "unresolved-requires"
+  | "broken-relative-link";
 
 export interface RegistryValidationViolation {
   code: RegistryValidationCode;
@@ -49,6 +55,7 @@ export async function validateRegistryEntries(
 
   const seenNames = new Map<string, string>();
   const seenSkillSlugs = new Map<string, string>();
+  const materialized: { path: string; skill: LoadedSkill }[] = [];
 
   for (const source of sources) {
     if (source.kind === "skillset") {
@@ -72,9 +79,13 @@ export async function validateRegistryEntries(
     registerName(seenNames, manifest.metadata.name, source.path, violations);
     registerSlug(seenSkillSlugs, manifest.spec.skill.name, source.path, violations);
 
-    if (manifest.spec.source.type === "file") {
-      await validateMaterializedSkill(options.rootDir, source.path, manifest, violations);
-    }
+    const skill = await validateMaterializedSkill(options.rootDir, source.path, manifest, violations);
+    if (skill) materialized.push({ path: source.path, skill });
+  }
+
+  for (const entry of materialized) {
+    validateRequires(entry.path, entry.skill, seenSkillSlugs, violations);
+    await validateRelativeLinks(entry.path, entry.skill, violations);
   }
 
   return { ok: violations.length === 0, entryCount: sources.length, violations };
@@ -85,7 +96,7 @@ async function validateMaterializedSkill(
   path: string,
   manifest: Parameters<typeof validateSkillAgainstManifest>[1],
   violations: RegistryValidationViolation[],
-): Promise<void> {
+): Promise<LoadedSkill | null> {
   const skillDir = join(rootDir, manifest.spec.output.path);
   const skill = await loadSkillDir(skillDir).catch((error: unknown) => {
     violations.push({
@@ -96,7 +107,7 @@ async function validateMaterializedSkill(
     });
     return null;
   });
-  if (!skill) return;
+  if (!skill) return null;
 
   for (const violation of validateSkillAgainstManifest(skill, manifest)) {
     violations.push({
@@ -105,6 +116,67 @@ async function validateMaterializedSkill(
       name: manifest.metadata.name,
       message: violation.message,
     });
+  }
+  return skill;
+}
+
+function validateRequires(
+  path: string,
+  skill: LoadedSkill,
+  seenSkillSlugs: Map<string, string>,
+  violations: RegistryValidationViolation[],
+): void {
+  const requires = skill.frontmatter.metadata?.[SKILL_REQUIRES_META_KEY];
+  if (!requires) return;
+  for (const slug of requires.split(",").map((value) => value.trim()).filter(Boolean)) {
+    if (!seenSkillSlugs.has(slug)) {
+      violations.push({
+        code: "unresolved-requires",
+        path,
+        name: skill.frontmatter.name,
+        message: `Required skill "${slug}" is not in the registry.`,
+      });
+    }
+  }
+}
+
+const RELATIVE_LINK_PATTERN = /\]\(((?:\.\.\/|references\/|assets\/|scripts\/)[^)#\s]+)/g;
+
+async function validateRelativeLinks(
+  path: string,
+  skill: LoadedSkill,
+  violations: RegistryValidationViolation[],
+): Promise<void> {
+  const contents = [
+    skill.body,
+    ...(await Promise.all(
+      skill.references.map((reference) =>
+        readFile(join(skill.skillDir, "references", reference), "utf8"),
+      ),
+    )),
+  ];
+  const targets = new Set<string>();
+  for (const content of contents) {
+    for (const match of content.matchAll(RELATIVE_LINK_PATTERN)) {
+      const target = match[1];
+      if (target !== undefined) targets.add(target);
+    }
+  }
+  for (const target of [...targets].sort()) {
+    // Links in reference files are resolved from references/, links in the
+    // body from the skill root; accept a target that resolves from either.
+    const candidates = [join(skill.skillDir, target), join(skill.skillDir, "references", target)];
+    const exists = (
+      await Promise.all(candidates.map((candidate) => access(candidate).then(() => true, () => false)))
+    ).some(Boolean);
+    if (!exists) {
+      violations.push({
+        code: "broken-relative-link",
+        path,
+        name: skill.frontmatter.name,
+        message: `Relative link target "${target}" does not exist.`,
+      });
+    }
   }
 }
 

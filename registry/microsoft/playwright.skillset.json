@@ -1,0 +1,23 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillSet",
+  "metadata": {
+    "name": "com.microsoft/playwright-skills",
+    "version": "0.1.0",
+    "title": "Playwright Skills",
+    "description": "Microsoft's Playwright CLI agent skill, pinned from its source repository.",
+    "labels": ["browser", "external", "testing"]
+  },
+  "spec": {
+    "skills": [
+      {
+        "name": "playwright-cli",
+        "source": "microsoft/playwright-cli",
+        "sourceType": "github",
+        "skillPath": "skills/playwright-cli/SKILL.md",
+        "computedHash": "32cf6cf8733ae75ae41f5241347bca74459629f90bcfbd4e25540ede5d4b8f95",
+        "summary": "Drive browsers via the Playwright CLI for end-to-end checks and screenshots."
+      }
+    ]
+  }
+}

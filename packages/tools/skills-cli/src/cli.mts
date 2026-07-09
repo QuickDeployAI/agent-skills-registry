@@ -13,12 +13,14 @@ import {
   formatRegistryValidationViolations,
   validateRegistryEntries,
 } from "./registry-validate.js";
+import { runImport } from "./import.js";
 import { scaffoldSkill } from "./scaffold.js";
 
 function usage(): string {
   return [
     "Usage: skills-cli build [--root <dir>] [--check]",
     "       skills-cli validate [--root <dir>]",
+    "       skills-cli import --manifest <registry/...skill.json> [--root <dir>]",
     "       skills-cli config-schema --importer <engine>",
     "       skills-cli scaffold skill <provider>/<name> --description <text> [--title <text>] [--force]",
     "",
@@ -101,6 +103,19 @@ async function main(): Promise<number> {
       process.stdout.write(formatRegistryValidationViolations(result.violations));
       if (!result.ok) return 1;
       process.stdout.write(`Validated ${result.entryCount} registry source(s).\n`);
+      return 0;
+    }
+
+    case "import": {
+      const manifestPath = stringFlag(flags, "manifest");
+      if (!manifestPath) {
+        process.stderr.write("import requires --manifest <path>.\n");
+        return 1;
+      }
+      const result = await runImport({ rootDir, manifestPath });
+      process.stdout.write(
+        `Ran ${result.engine} into ${result.outputPath}: ${result.written.join(", ")}.\nRun "skills-cli build" to regenerate skills.json.\n`,
+      );
       return 0;
     }
 

@@ -6,8 +6,12 @@ collections, CRM follow-up, commerce operations, and month-end reporting —
 plus the source-to-skill importer family that generates and maintains those
 skills.
 
-Status: **Phase 0 (workspace bootstrap + this backlog) is done.** Everything
-below Phase 0 is planned, not built.
+Status: **Phases 0, A, B, and C are implemented.** All four importer
+engines exist under `packages/importers/`, all nine skills are committed
+under `skills/quickdeploy/`, the first external `*.skillset.json` pin is in
+`registry/microsoft/`, and MCP-Registry gained an `smb-agent-skills.mcp.json`
+manifest serving these skills (its PR #97). Remaining follow-ups are listed
+at the bottom.
 
 ## Why these apps
 
@@ -62,19 +66,19 @@ the history is honest:
   named env-var opt-in.
 - Secrets by environment-variable name only.
 
-## Phase A — hand-authored Stripe skills (no importer needed)
+## Phase A — hand-authored Stripe skills (no importer needed) — SHIPPED
 
 | Skill | Scope | Safety |
 | --- | --- | --- |
-| `stripe-payments-operator` *(seeded in Phase 0)* | payments/customers/subscriptions inspection, webhook testing, reconciliation handoff | read-write; `refund-payment`, `cancel-subscription` confirm-gated; `STRIPE_API_KEY` by name; `STRIPE_LIVE_MODE` gate |
-| `smb-cashflow-daily-pulse` (v1, Stripe-only) | daily balance, payouts, failed-charge digest, near-term cash risk | strictly read-only |
+| `stripe-payments-operator` *(seeded in Phase 0; CLI reference now importer-generated)* | payments/customers/subscriptions inspection, webhook testing, reconciliation handoff | read-write; `refund-payment`, `cancel-subscription` confirm-gated; `STRIPE_API_KEY` by name; `STRIPE_LIVE_MODE` gate |
+| `smb-cashflow-daily-pulse` *(shipped through v2 — all composed sections live)* | daily balance, payouts, failed-charge digest, receivables/payables, sales, low inventory, cash risk | strictly read-only |
 
 Rationale: highest value-per-effort, exercises the full registry pipeline on
 the one provider with in-house expertise, and cashflow-pulse is the cheapest
 high-visibility cross-app skill to start (it grows per-app sections in later
 phases).
 
-## Phase B — first importers + accounting/CRM skills
+## Phase B — first importers + accounting/CRM skills — SHIPPED
 
 Importers (in `packages/importers/`, fixture-tested):
 
@@ -95,7 +99,7 @@ Skills:
 | `quickbooks-bookkeeping` | openapi/docs importers | QBO sandbox company; OAuth via shared recipe; bank-feed review, P&L/cash-flow prompts, close prep, accountant handoff |
 | `hubspot-crm-followup` | openapi importer | read-only GETs matching MCP-Registry's HubSpot curation; contact/deal hygiene, lifecycle stages, pipeline reporting |
 
-## Phase C — docs/GraphQL importers + commerce and cross-app skills
+## Phase C — docs/GraphQL importers + commerce and cross-app skills — SHIPPED
 
 Importers:
 
@@ -122,16 +126,21 @@ Cross-app composition convention: prerequisite skills declared in
 frontmatter metadata (`ai.quickdeploy.skills/requires`), sibling references
 linked relatively; validation resolves both.
 
-## Integration follow-ups (separate changes, not this repo alone)
+## Integration follow-ups
 
-- **MCP-Registry**: repoint `registry/quickdeploy/agent-skills.mcp.json`'s
-  `spec.source` at a pinned ref of this repository. Zero importer changes —
-  `skills.json`'s `agents` array already matches the index shape
-  `agent-skills-2-mcp` consumes. Scripts remain disabled unless
-  `SKILLS_MCP_SCRIPT_ALLOWLIST` opts in.
-- **monorepo**: install registry skills via `vp dlx skills add`;
-  `skills-lock.json` `computedHash` semantics already match this registry's
-  `contentHash` (SHA-256 of the SKILL.md at `skillPath`).
+- **MCP-Registry** — DONE (additively): `registry/quickdeploy/smb-agent-skills.mcp.json`
+  serves these nine skills via `agent-skills-2-mcp` with zero importer
+  changes (`skills.json`'s `agents` array matches the index shape that
+  importer consumes). Scripts remain disabled unless
+  `SKILLS_MCP_SCRIPT_ALLOWLIST` opts in. Remaining: pin the git ref from
+  `#main` to a tagged release once this registry cuts one.
+- **monorepo** (consumer action, no repo change): install registry skills
+  via `vp dlx skills add`; `skills-lock.json` `computedHash` semantics
+  already match this registry's `contentHash` (SHA-256 of the SKILL.md at
+  `skillPath`).
+- **Real-source refresh**: the Stripe help dump, Square Connect subset, and
+  Shopify SDL subset under `sources/` are curated captures — re-capture
+  from the live CLIs/specs on a cadence and re-run `skills-cli import`.
 
 ## Test plan (standing)
 

@@ -1,0 +1,53 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/skill-registry-author",
+    "version": "0.1.0",
+    "title": "Skill Registry Author",
+    "description": "Author, validate, and publish skills in the agent-skills-registry.",
+    "labels": ["authoring", "meta", "registry"]
+  },
+  "spec": {
+    "source": {
+      "type": "file",
+      "uri": "skills/quickdeploy/skill-registry-author"
+    },
+    "skill": {
+      "name": "skill-registry-author",
+      "description": "Author, validate, and publish agent skills in the QuickDeploy agent-skills-registry — scaffold the content and manifest, declare safety honestly, run importers, and get pnpm check green before opening a PR.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "false",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/destructive-ops": "publish-registry-change"
+      }
+    },
+    "safety": {
+      "readOnly": false,
+      "destructiveOperations": [
+        {
+          "name": "publish-registry-change",
+          "description": "Commits, pushes, and opens a PR with the registry change.",
+          "confirmation": "explicit"
+        }
+      ],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [
+        { "name": "pnpm", "kind": "cli", "versionRange": ">=10", "installHint": "https://pnpm.io/installation" }
+      ],
+      "env": []
+    },
+    "references": [],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/skill-registry-author"
+    }
+  }
+}

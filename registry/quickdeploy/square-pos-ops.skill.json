@@ -1,0 +1,82 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/square-pos-ops",
+    "version": "0.1.0",
+    "title": "Square POS Ops",
+    "description": "Square payments, orders, catalog, inventory, and customers; refunds confirm-gated.",
+    "labels": ["commerce", "payments", "pos", "smb", "square"]
+  },
+  "spec": {
+    "importer": {
+      "engine": "openapi-2-agent-skills",
+      "versionRange": "^0.1.0"
+    },
+    "source": {
+      "type": "file",
+      "uri": "sources/square/connect-subset.json"
+    },
+    "select": {
+      "requests": [
+        { "method": "GET", "uriTemplate": "/v2/payments" },
+        { "method": "GET", "uriTemplate": "/v2/payments/{payment_id}" },
+        { "method": "GET", "uriTemplate": "/v2/orders/{order_id}" },
+        { "method": "GET", "uriTemplate": "/v2/catalog/list" },
+        { "method": "GET", "uriTemplate": "/v2/inventory/counts/{catalog_object_id}" },
+        { "method": "GET", "uriTemplate": "/v2/customers" },
+        { "method": "POST", "uriTemplate": "/v2/refunds" }
+      ]
+    },
+    "config": {
+      "defaults": {
+        "baseUrl": "https://connect.squareupsandbox.com",
+        "mode": "read-write"
+      }
+    },
+    "skill": {
+      "name": "square-pos-ops",
+      "description": "Operate Square POS back-office work against the sandbox by default — payments review, order lookup, catalog and inventory checks, customer lists — with refunds as the only confirm-gated write.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "false",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/destructive-ops": "refund-payment"
+      }
+    },
+    "safety": {
+      "readOnly": false,
+      "destructiveOperations": [
+        {
+          "name": "refund-payment",
+          "description": "Refunds a completed Square payment in full or in part.",
+          "confirmation": "explicit"
+        }
+      ],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "SQUARE_PRODUCTION"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [],
+      "env": [
+        { "name": "SQUARE_ACCESS_TOKEN", "description": "Square access token; sandbox token by default.", "required": true, "secret": true },
+        { "name": "SQUARE_PRODUCTION", "description": "Set to 1 to explicitly target production.", "required": false, "secret": false }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/api-endpoints.md",
+        "title": "Generated Connect endpoint reference",
+        "purpose": "Importer-generated endpoint shapes from the curated Connect subset."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/square-pos-ops"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/quickbooks-bookkeeping",
+    "version": "0.1.0",
+    "title": "QuickBooks Bookkeeping",
+    "description": "QBO bank review, reporting, month-end close prep, and accountant handoff.",
+    "labels": ["accounting", "quickbooks", "reporting", "smb"]
+  },
+  "spec": {
+    "importer": {
+      "engine": "docs-2-agent-skills",
+      "versionRange": "^0.1.0"
+    },
+    "source": {
+      "type": "file",
+      "uri": "sources/quickbooks/docs-bundle.json"
+    },
+    "select": {
+      "docGlobs": [
+        "Categorize bank transactions",
+        "Run Profit and Loss and cash-flow reports",
+        "Month-end close checklist",
+        "Accountant handoff",
+        "Invoice export",
+        "Transactions export"
+      ]
+    },
+    "skill": {
+      "name": "quickbooks-bookkeeping",
+      "description": "Operate QuickBooks Online bookkeeping against a sandbox company by default — bank transaction review, P&L and cash-flow reporting, month-end close prep, and accountant handoff — with all book-changing actions confirm-gated.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "false",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/destructive-ops": "categorize-transaction,create-adjustment"
+      }
+    },
+    "safety": {
+      "readOnly": false,
+      "destructiveOperations": [
+        {
+          "name": "categorize-transaction",
+          "description": "Categorizes or matches bank-feed rows, changing the books.",
+          "confirmation": "explicit"
+        },
+        {
+          "name": "create-adjustment",
+          "description": "Creates an adjusting journal entry.",
+          "confirmation": "explicit"
+        }
+      ],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "QBO_PRODUCTION"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [],
+      "env": [
+        { "name": "QBO_CLIENT_ID", "description": "Intuit app client id.", "required": true, "secret": false },
+        { "name": "QBO_CLIENT_SECRET", "description": "Intuit app client secret.", "required": true, "secret": true },
+        { "name": "QBO_REFRESH_TOKEN", "description": "OAuth2 refresh token.", "required": true, "secret": true },
+        { "name": "QBO_REALM_ID", "description": "Company (realm) id — sandbox company by default.", "required": true, "secret": false },
+        { "name": "QBO_PRODUCTION", "description": "Set to 1 to explicitly target the production company.", "required": false, "secret": false }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/docs-categorize-bank-transactions.md",
+        "title": "Categorize bank transactions",
+        "purpose": "Generated bank-feed review procedure."
+      },
+      {
+        "path": "references/docs-run-profit-and-loss-and-cash-flow-reports.md",
+        "title": "P&L and cash-flow reports",
+        "purpose": "Generated reporting procedure."
+      },
+      {
+        "path": "references/docs-month-end-close-checklist.md",
+        "title": "Month-end close checklist",
+        "purpose": "Generated close procedure."
+      },
+      {
+        "path": "references/docs-accountant-handoff.md",
+        "title": "Accountant handoff",
+        "purpose": "Generated accountant packet procedure."
+      },
+      {
+        "path": "references/export-invoice-export.md",
+        "title": "Invoice export columns",
+        "purpose": "Generated CSV column map with validation rules."
+      },
+      {
+        "path": "references/export-transactions-export.md",
+        "title": "Transactions export columns",
+        "purpose": "Generated CSV column map with validation rules."
+      },
+      {
+        "path": "references/oauth-setup.md",
+        "title": "QuickBooks app and token setup",
+        "purpose": "Least-privilege OAuth2 scopes, sandbox vs production, token handling."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/quickbooks-bookkeeping"
+    }
+  }
+}

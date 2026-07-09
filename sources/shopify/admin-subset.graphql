@@ -1,0 +1,103 @@
+# Curated subset of the Shopify Admin GraphQL API (2025-07) covering the
+# operations the shopify-store-operator skill uses. The full schema is
+# hundreds of thousands of lines; keep this subset in sync with the
+# operations selected in the skill manifest.
+
+type Product {
+  id: ID!
+  title: String!
+  status: String!
+  totalInventory: Int
+}
+
+type Order {
+  id: ID!
+  name: String!
+  displayFinancialStatus: String
+  displayFulfillmentStatus: String!
+}
+
+type Customer {
+  id: ID!
+  displayName: String!
+  email: String
+  numberOfOrders: Int!
+}
+
+type InventoryLevel {
+  id: ID!
+  available: Int
+}
+
+input ProductUpdateInput {
+  id: ID!
+  title: String
+  status: String
+}
+
+input DiscountCodeBasicInput {
+  title: String
+  code: String
+}
+
+type UserError {
+  field: [String!]
+  message: String!
+}
+
+type ProductUpdatePayload {
+  product: Product
+  userErrors: [UserError!]!
+}
+
+type OrderClosePayload {
+  order: Order
+  userErrors: [UserError!]!
+}
+
+type DiscountCodeBasicCreatePayload {
+  userErrors: [UserError!]!
+}
+
+type InventoryAdjustQuantitiesPayload {
+  userErrors: [UserError!]!
+}
+
+input InventoryAdjustQuantitiesInput {
+  reason: String!
+  name: String!
+}
+
+type Query {
+  """Look up a single product by ID."""
+  product(id: ID!): Product
+
+  """List products with search syntax (e.g. status:active, title:*shirt*)."""
+  products(first: Int!, query: String): [Product!]!
+
+  """Look up a single order by ID."""
+  order(id: ID!): Order
+
+  """List orders with search syntax (e.g. fulfillment_status:unfulfilled)."""
+  orders(first: Int!, query: String): [Order!]!
+
+  """List customers with search syntax."""
+  customers(first: Int!, query: String): [Customer!]!
+
+  """List inventory levels for a location."""
+  inventoryLevel(id: ID!): InventoryLevel
+}
+
+type Mutation {
+  """Update product attributes such as title and status."""
+  productUpdate(input: ProductUpdateInput!): ProductUpdatePayload
+
+  """Close a fully-fulfilled order."""
+  orderClose(input: ID!): OrderClosePayload
+
+  """Create a basic discount code."""
+  discountCodeBasicCreate(basicCodeDiscount: DiscountCodeBasicInput!): DiscountCodeBasicCreatePayload
+
+  """Adjust available inventory quantities at a location."""
+  inventoryAdjustQuantities(input: InventoryAdjustQuantitiesInput!): InventoryAdjustQuantitiesPayload
+}

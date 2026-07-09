@@ -9,9 +9,24 @@
     "labels": ["payments", "smb", "stripe"]
   },
   "spec": {
+    "importer": {
+      "engine": "cli-2-agent-skills",
+      "versionRange": "^0.1.0"
+    },
     "source": {
       "type": "file",
-      "uri": "skills/quickdeploy/stripe-payments-operator"
+      "uri": "sources/stripe/stripe-cli-help.json"
+    },
+    "select": {
+      "commands": [
+        { "command": "payment_intents list", "destructive": false },
+        { "command": "charges retrieve", "destructive": false },
+        { "command": "customers list", "destructive": false },
+        { "command": "subscriptions list", "destructive": false },
+        { "command": "balance_transactions list", "destructive": false },
+        { "command": "refunds create", "destructive": true },
+        { "command": "subscriptions cancel", "destructive": true }
+      ]
     },
     "skill": {
       "name": "stripe-payments-operator",
@@ -68,6 +83,11 @@
       ]
     },
     "references": [
+      {
+        "path": "references/cli-commands.md",
+        "title": "Generated CLI command reference",
+        "purpose": "Importer-generated command list from the captured Stripe CLI help dump."
+      },
       {
         "path": "references/stripe-cli.md",
         "title": "Stripe CLI reference",

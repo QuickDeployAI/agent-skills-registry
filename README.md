@@ -19,9 +19,15 @@ Workspace package lanes:
 - `packages/core/*` — shared libraries and workspace config used by importers
   and registry tools (`skill-core`: frontmatter parsing, digest-pinned source
   fetching, content hashing, manifest/content cross-validation).
-- `packages/importers/*` — converters that turn external source shapes (CLI
-  help trees, OpenAPI specs, product docs, GraphQL schemas) into skill
-  packages. Engine names end in `-2-agent-skills`.
+- `packages/importers/*` — converters that turn external source shapes into
+  skill reference bundles. Engine names end in `-2-agent-skills`; current
+  engines: `cli-2-agent-skills` (captured CLI help dumps),
+  `openapi-2-agent-skills` (digest-pinned OpenAPI specs),
+  `docs-2-agent-skills` (docs bundles + CSV export column maps), and
+  `graphql-2-agent-skills` (SDL with mutation safety checklists). Run one
+  with `skills-cli import --manifest registry/<provider>/<name>.skill.json`;
+  importers only ever write `references/`/`assets/` — SKILL.md stays
+  curated.
 - `packages/schemas/*` — skill registry and manifest schemas shared by the
   repo (Zod, consumed from source — no build step).
 - `packages/tools/*` — repo-local CLIs and validation tools (`skills-cli`).

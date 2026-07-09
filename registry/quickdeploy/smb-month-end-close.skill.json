@@ -1,0 +1,52 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/smb-month-end-close",
+    "version": "0.1.0",
+    "title": "SMB Month-End Close",
+    "description": "Read-only cross-app close: reconcile processors against the books, build the packet.",
+    "labels": ["accounting", "cross-app", "reporting", "smb"]
+  },
+  "spec": {
+    "source": {
+      "type": "file",
+      "uri": "skills/quickdeploy/smb-month-end-close"
+    },
+    "skill": {
+      "name": "smb-month-end-close",
+      "description": "Drive a small business's month-end close across QuickBooks, Stripe, Square, and Shopify — pull the period's numbers, reconcile processor totals against the books, flag missing receipts and discrepancies, and produce an owner/accountant review packet — strictly read-only.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "true",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/requires": "quickbooks-bookkeeping,stripe-payments-operator,square-pos-ops,shopify-store-operator"
+      }
+    },
+    "safety": {
+      "readOnly": true,
+      "destructiveOperations": [],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [
+        { "name": "stripe", "kind": "cli", "installHint": "https://docs.stripe.com/stripe-cli" }
+      ],
+      "env": [
+        { "name": "STRIPE_API_KEY", "description": "Stripe secret key; test keys by default.", "required": false, "secret": true },
+        { "name": "SQUARE_ACCESS_TOKEN", "description": "Square access token; sandbox by default.", "required": false, "secret": true },
+        { "name": "SHOPIFY_ADMIN_TOKEN", "description": "Shopify Admin token; dev store by default.", "required": false, "secret": true },
+        { "name": "QBO_REFRESH_TOKEN", "description": "QuickBooks OAuth2 refresh token; sandbox company by default.", "required": false, "secret": true }
+      ]
+    },
+    "references": [],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/smb-month-end-close"
+    }
+  }
+}

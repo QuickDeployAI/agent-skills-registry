@@ -211,6 +211,23 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "graphqlOperations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "name"],
+            "properties": {
+              "type": {
+                "enum": ["query", "mutation"]
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
         }
       }
     },

@@ -1,0 +1,36 @@
+{
+  "name": "@quickdeployai/openapi-2-agent-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Convert OpenAPI specs into agent-skill endpoint references — no build step.",
+  "files": [
+    "src"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@quickdeployai/skill-registry-schemas": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@quickdeployai/agent-skills-registry-workspace-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

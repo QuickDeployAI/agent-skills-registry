@@ -58,9 +58,8 @@ importer changes. The SKILL.md frontmatter contract (required
 string-map `metadata`) is likewise kept in lockstep with that importer's
 `skill-loader.ts` and the monorepo's `inferAgentSkill()`.
 
-Follow-ups tracked in the backlog, not done here:
-
-- Repoint MCP-Registry's agent-skills manifests at a pinned ref of this
-  repository once content stabilizes.
-- Consumer-side installs from this registry via `vp dlx skills add` in the
-  monorepo (hash semantics already aligned).
+MCP-Registry's `registry/quickdeploy/smb-agent-skills.mcp.json` now serves
+this registry's skills through that importer. Remaining follow-ups tracked
+in the backlog: pin that manifest's git ref to a tagged release, and
+consumer-side installs via `vp dlx skills add` in the monorepo (hash
+semantics already aligned).

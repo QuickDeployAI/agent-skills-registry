@@ -30,6 +30,10 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@quickdeployai/cli-2-agent-skills": "workspace:*",
+    "@quickdeployai/docs-2-agent-skills": "workspace:*",
+    "@quickdeployai/graphql-2-agent-skills": "workspace:*",
+    "@quickdeployai/openapi-2-agent-skills": "workspace:*",
     "@quickdeployai/skill-core": "workspace:*",
     "@quickdeployai/skill-registry-schemas": "workspace:*",
     "zod": "catalog:"

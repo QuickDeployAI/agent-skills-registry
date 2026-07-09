@@ -1,0 +1,105 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/shopify-store-operator",
+    "version": "0.1.0",
+    "title": "Shopify Store Operator",
+    "description": "Admin GraphQL store operations with confirm-gated mutations, dev-store default.",
+    "labels": ["commerce", "graphql", "shopify", "smb"]
+  },
+  "spec": {
+    "importer": {
+      "engine": "graphql-2-agent-skills",
+      "versionRange": "^0.1.0"
+    },
+    "source": {
+      "type": "file",
+      "uri": "sources/shopify/admin-subset.graphql"
+    },
+    "select": {
+      "graphqlOperations": [
+        { "type": "query", "name": "product" },
+        { "type": "query", "name": "products" },
+        { "type": "query", "name": "order" },
+        { "type": "query", "name": "orders" },
+        { "type": "query", "name": "customers" },
+        { "type": "query", "name": "inventoryLevel" },
+        { "type": "mutation", "name": "productUpdate" },
+        { "type": "mutation", "name": "orderClose" },
+        { "type": "mutation", "name": "discountCodeBasicCreate" },
+        { "type": "mutation", "name": "inventoryAdjustQuantities" }
+      ]
+    },
+    "config": {
+      "defaults": {
+        "apiVersion": "2025-07"
+      }
+    },
+    "skill": {
+      "name": "shopify-store-operator",
+      "description": "Operate a Shopify store through the Admin GraphQL API against a development store by default — order triage, catalog and inventory checks, discounts, and customers — with every mutation confirm-gated.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "false",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/destructive-ops": "product-update,order-close,discount-create,inventory-adjust"
+      }
+    },
+    "safety": {
+      "readOnly": false,
+      "destructiveOperations": [
+        {
+          "name": "product-update",
+          "description": "Updates product attributes such as title and status.",
+          "confirmation": "explicit"
+        },
+        {
+          "name": "order-close",
+          "description": "Closes a fulfilled order.",
+          "confirmation": "explicit"
+        },
+        {
+          "name": "discount-create",
+          "description": "Creates a discount code.",
+          "confirmation": "explicit"
+        },
+        {
+          "name": "inventory-adjust",
+          "description": "Adjusts available inventory quantities.",
+          "confirmation": "explicit"
+        }
+      ],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "SHOPIFY_PRODUCTION"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [],
+      "env": [
+        { "name": "SHOPIFY_SHOP_DOMAIN", "description": "Shop domain, e.g. my-store.myshopify.com (dev store by default).", "required": true, "secret": false },
+        { "name": "SHOPIFY_ADMIN_TOKEN", "description": "Admin API access token with least-privilege scopes.", "required": true, "secret": true },
+        { "name": "SHOPIFY_PRODUCTION", "description": "Set to 1 to explicitly target the production shop.", "required": false, "secret": false }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/graphql-operations.md",
+        "title": "Generated GraphQL operation reference",
+        "purpose": "Importer-generated operation shapes with mutation safety checklists."
+      },
+      {
+        "path": "references/oauth-setup.md",
+        "title": "Shopify app and token setup",
+        "purpose": "Least-privilege scopes, dev-store default, request conventions."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/shopify-store-operator"
+    }
+  }
+}

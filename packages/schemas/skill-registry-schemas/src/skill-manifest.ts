@@ -22,6 +22,13 @@ export const SKILL_SAFETY_READ_ONLY_META_KEY = "ai.quickdeploy.skills/read-only"
 export const SKILL_SAFETY_SANDBOX_DEFAULT_META_KEY = "ai.quickdeploy.skills/sandbox-default";
 export const SKILL_SAFETY_DESTRUCTIVE_OPS_META_KEY = "ai.quickdeploy.skills/destructive-ops";
 
+/**
+ * Frontmatter `metadata` key declaring prerequisite skill slugs (CSV) for
+ * cross-app skills. Registry validation resolves every listed slug against
+ * the catalog so composition can't silently break.
+ */
+export const SKILL_REQUIRES_META_KEY = "ai.quickdeploy.skills/requires";
+
 const skillRelativePath = z
   .string()
   .min(1)
@@ -78,9 +85,18 @@ export const SkillManifestSelectSchema = z
       )
       .optional(),
     docGlobs: z.array(z.string().min(1)).optional(),
+    graphqlOperations: z
+      .array(
+        z.object({
+          type: z.enum(["query", "mutation"]),
+          name: z.string().min(1),
+        }),
+      )
+      .optional(),
   })
   .refine((select) => Object.values(select).some((value) => value !== undefined), {
-    message: "select must declare at least one of commands, requests, or docGlobs.",
+    message:
+      "select must declare at least one of commands, requests, docGlobs, or graphqlOperations.",
   });
 export type SkillManifestSelect = z.infer<typeof SkillManifestSelectSchema>;
 
@@ -231,6 +247,21 @@ export const SKILL_IMPORTER_CONFIG_SCHEMAS: Record<string, Record<string, unknow
       baseUrl: { type: "string", format: "uri" },
       requestTimeoutMs: { type: "number", minimum: 1 },
       mode: { type: "string", enum: ["read-only", "read-write"] },
+    },
+  },
+  "docs-2-agent-skills": {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      product: { type: "string", description: "Product name override for generated headings." },
+    },
+  },
+  "graphql-2-agent-skills": {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      endpoint: { type: "string", format: "uri", description: "GraphQL endpoint the skill targets." },
+      apiVersion: { type: "string", description: "Provider API version, e.g. Shopify 2025-07." },
     },
   },
 };
