@@ -1,0 +1,36 @@
+{
+  "$schema": "https://quickdeploy.ai/schemas/skills-json.schema.json",
+  "agents": [
+    {
+      "skill": "skills/quickdeploy/stripe-payments-operator/SKILL.md",
+      "summary": "Operate Stripe payments from an agent with sandbox-safe defaults — inspect payments, customers, subscriptions, and webhooks via the Stripe CLI/API, and only touch money-moving operations with explicit confirmation."
+    }
+  ],
+  "skills": [
+    {
+      "name": "ai.quickdeploy/stripe-payments-operator",
+      "version": "0.1.0",
+      "description": "Sandbox-safe Stripe payments operations with confirm-gated refunds and cancellations.",
+      "skillPath": "skills/quickdeploy/stripe-payments-operator",
+      "contentHash": "729f6a756e119cfc5e054ba748d3340df4039e647402bd283883f602eee43321",
+      "labels": ["payments", "smb", "stripe"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "authored",
+          "isOfficial": true,
+          "tags": ["authored", "payments", "smb", "stripe"]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 2,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    }
+  ],
+  "_meta": {
+    "ai.quickdeploy.registry/generatedBy": "@quickdeployai/skills-cli",
+    "ai.quickdeploy.registry/sourceCount": 1
+  }
+}

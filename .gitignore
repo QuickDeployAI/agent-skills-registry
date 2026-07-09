@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Package-manager output
+.pnpm-store/
+
+# Build output
+dist/
+coverage/
+.turbo/
+
+# Test output
+test-results/
+.vitest/
+
+# Generated registry outputs
+registry/index.json
+.generated/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editors and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
