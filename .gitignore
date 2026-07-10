@@ -1,0 +1,8 @@
+node_modules/
+.turbo/
+dist/
+coverage/
+.generated/
+.generated/agent-skills-codegen/
+*.tsbuildinfo
+.DS_Store

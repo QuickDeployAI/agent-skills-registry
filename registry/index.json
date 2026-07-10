@@ -1,0 +1,12 @@
+{
+  "agents": [
+    {
+      "id": "ai.quickdeploy/registry-author",
+      "name": "registry-author",
+      "skill": "../skills/quickdeploy/registry-author/SKILL.md",
+      "summary": "Author and review QuickDeploy agent-skill registry entries."
+    }
+  ],
+  "generatedBy": "@quickdeployai/agent-skills-registry-cli",
+  "schemaVersion": "quickdeploy.agent-skills-registry/v1"
+}

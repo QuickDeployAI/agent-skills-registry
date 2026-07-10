@@ -1,0 +1,30 @@
+{
+  "name": "@quickdeployai/agent-skills-registry-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "QuickDeployAI Agent Skills Registry workspace",
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "check": "pnpm build && pnpm typecheck && pnpm lint && pnpm test && pnpm registry:validate && pnpm registry:check",
+    "registry:build": "pnpm --filter @quickdeployai/agent-skills-registry-cli registry:build",
+    "registry:check": "pnpm --filter @quickdeployai/agent-skills-registry-cli registry:check",
+    "registry:validate": "pnpm --filter @quickdeployai/agent-skills-registry-cli registry:validate"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "yaml": "catalog:",
+    "zod": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

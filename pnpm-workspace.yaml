@@ -1,0 +1,14 @@
+packages:
+  - packages/core/*
+  - packages/importers/*
+  - packages/schemas/*
+  - packages/tools/*
+
+catalog:
+  "@types/node": "^24.10.2"
+  "tsx": "^4.22.4"
+  "turbo": "^2.9.18"
+  "typescript": "^5.9.3"
+  "vitest": "^4.1.9"
+  "yaml": "^2.8.2"
+  "zod": "^4.4.3"

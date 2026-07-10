@@ -1,0 +1,31 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Acme Pets",
+    "version": "1.2.3",
+    "description": "Use the Acme Pets API."
+  },
+  "servers": [
+    {
+      "url": "https://api.example.test"
+    }
+  ],
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "listPets",
+        "summary": "List pets."
+      },
+      "post": {
+        "operationId": "createPet",
+        "summary": "Create a pet."
+      }
+    },
+    "/pets/{id}": {
+      "get": {
+        "operationId": "getPet",
+        "summary": "Get a pet."
+      }
+    }
+  }
+}

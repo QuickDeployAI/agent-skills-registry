@@ -1,0 +1,6 @@
+Usage: qdai deploy [options]
+
+Options:
+  --dry-run       Show planned deployment actions without applying them.
+  --environment  Target environment.
+  --help         Show command help.

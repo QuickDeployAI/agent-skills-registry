@@ -1,0 +1,42 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "AgentSkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/registry-author",
+    "version": "0.1.0",
+    "title": "Registry Author",
+    "description": "Author and review QuickDeploy agent-skill registry entries.",
+    "labels": ["quickdeploy", "registry", "authoring"]
+  },
+  "spec": {
+    "source": {
+      "type": "file",
+      "uri": "skills/quickdeploy/registry-author",
+      "license": "MIT"
+    },
+    "package": {
+      "entrypoint": "SKILL.md",
+      "artifacts": {
+        "references": ["references/manifest-authoring.md"],
+        "scripts": [],
+        "assets": []
+      }
+    },
+    "compatibility": {
+      "agents": ["codex"],
+      "tools": ["Read", "Bash", "ApplyPatch"],
+      "models": []
+    },
+    "safety": {
+      "status": "review",
+      "permissions": ["filesystem-read", "workspace-write"],
+      "secrets": []
+    },
+    "curation": {
+      "verifiedStatus": "review",
+      "category": "registry",
+      "isOfficial": true,
+      "tags": ["quickdeploy", "agent-skills"]
+    }
+  }
+}
