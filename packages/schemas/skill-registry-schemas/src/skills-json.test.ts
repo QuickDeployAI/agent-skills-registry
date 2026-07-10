@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   QUICKDEPLOY_REGISTRY_CURATION_META_KEY,
+  QUICKDEPLOY_REGISTRY_MONETIZATION_META_KEY,
   SkillEntrySchema,
   SkillsJsonEnvelopeSchema,
+  quickDeployRegistryMonetization,
 } from "./skills-json.js";
 
 describe("SkillsJsonEnvelopeSchema", () => {
@@ -41,6 +43,56 @@ describe("SkillsJsonEnvelopeSchema", () => {
       name: "ai.quickdeploy/example",
       skillPath: "skills/quickdeploy/example",
       verifiedStatus: "verified",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts monetization payloads under the reverse-DNS meta key", () => {
+    const entry = SkillEntrySchema.parse({
+      name: "ai.quickdeploy/stripe-payments-operator",
+      skillPath: "skills/quickdeploy/stripe-payments-operator",
+      _meta: {
+        [QUICKDEPLOY_REGISTRY_MONETIZATION_META_KEY]: {
+          pricing: { model: "per-request", price: "0.01" },
+          acceptedProtocols: ["x402", "l402"],
+          x402: {
+            networks: ["base"],
+            payTo: "0x1111111111111111111111111111111111111111",
+          },
+        },
+      },
+    });
+
+    expect(quickDeployRegistryMonetization(entry)).toMatchObject({
+      pricing: { model: "per-request", price: "0.01", currency: "USD" },
+      acceptedProtocols: ["x402", "l402"],
+      x402: {
+        networks: ["base"],
+        asset: "USDC",
+        payTo: "0x1111111111111111111111111111111111111111",
+      },
+    });
+  });
+
+  it("rejects top-level monetization fields on skill entries", () => {
+    const result = SkillEntrySchema.safeParse({
+      name: "ai.quickdeploy/example",
+      skillPath: "skills/quickdeploy/example",
+      monetization: { pricing: { model: "per-request", price: "0.01" } },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects monetization payloads with unknown payment protocols", () => {
+    const result = SkillEntrySchema.safeParse({
+      name: "ai.quickdeploy/example",
+      skillPath: "skills/quickdeploy/example",
+      _meta: {
+        [QUICKDEPLOY_REGISTRY_MONETIZATION_META_KEY]: {
+          pricing: { model: "per-request", price: "0.01" },
+          acceptedProtocols: ["visa"],
+        },
+      },
     });
     expect(result.success).toBe(false);
   });
