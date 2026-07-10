@@ -1,0 +1,311 @@
+{
+  "$schema": "https://quickdeploy.ai/schemas/skills-json.schema.json",
+  "agents": [
+    {
+      "skill": "skills/quickdeploy/hubspot-crm-followup/SKILL.md",
+      "summary": "Review HubSpot contacts, companies, and deals read-only — find stale leads, lifecycle-stage gaps, and pipeline follow-ups, and draft (never send) outreach for the owner."
+    },
+    {
+      "skill": "skills/quickdeploy/quickbooks-bookkeeping/SKILL.md",
+      "summary": "Operate QuickBooks Online bookkeeping against a sandbox company by default — bank transaction review, P&L and cash-flow reporting, month-end close prep, and accountant handoff — with all book-changing actions confirm-gated."
+    },
+    {
+      "skill": "skills/quickdeploy/shopify-store-operator/SKILL.md",
+      "summary": "Operate a Shopify store through the Admin GraphQL API against a development store by default — order triage, catalog and inventory checks, discounts, and customers — with every mutation confirm-gated."
+    },
+    {
+      "skill": "skills/quickdeploy/skill-registry-author/SKILL.md",
+      "summary": "Author, validate, and publish agent skills in the QuickDeploy agent-skills-registry — scaffold the content and manifest, declare safety honestly, run importers, and get pnpm check green before opening a PR."
+    },
+    {
+      "skill": "skills/quickdeploy/smb-cashflow-daily-pulse/SKILL.md",
+      "summary": "Produce a small business's daily cash pulse — balance, payouts, failed payments, receivables/payables, sales, low inventory, and near-term cash risk — strictly read-only across Stripe, QuickBooks, Square, and Shopify."
+    },
+    {
+      "skill": "skills/quickdeploy/smb-collections-followup/SKILL.md",
+      "summary": "Chase overdue receivables across Stripe and QuickBooks — build the aging picture, draft payment reminders, and prepare escalations — with every outbound send and payment retry confirm-gated."
+    },
+    {
+      "skill": "skills/quickdeploy/smb-month-end-close/SKILL.md",
+      "summary": "Drive a small business's month-end close across QuickBooks, Stripe, Square, and Shopify — pull the period's numbers, reconcile processor totals against the books, flag missing receipts and discrepancies, and produce an owner/accountant review packet — strictly read-only."
+    },
+    {
+      "skill": "skills/quickdeploy/square-pos-ops/SKILL.md",
+      "summary": "Operate Square POS back-office work against the sandbox by default — payments review, order lookup, catalog and inventory checks, customer lists — with refunds as the only confirm-gated write."
+    },
+    {
+      "skill": "skills/quickdeploy/stripe-payments-operator/SKILL.md",
+      "summary": "Operate Stripe payments from an agent with sandbox-safe defaults — inspect payments, customers, subscriptions, and webhooks via the Stripe CLI/API, and only touch money-moving operations with explicit confirmation."
+    }
+  ],
+  "skills": [
+    {
+      "name": "ai.quickdeploy/hubspot-crm-followup",
+      "version": "0.1.0",
+      "description": "Read-only HubSpot CRM hygiene: contacts, companies, deals, and follow-up prep.",
+      "skillPath": "skills/quickdeploy/hubspot-crm-followup",
+      "contentHash": "1119337aec1014df39b238e6d5f6d7196d361b1e976cb23b96dcd2a3a0cbafe0",
+      "labels": ["crm", "hubspot", "read-only", "smb"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "openapi-2-agent-skills",
+          "isOfficial": true,
+          "tags": [
+            "manifest-backed",
+            "crm",
+            "hubspot",
+            "read-only",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": true,
+          "destructiveCount": 0,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/quickbooks-bookkeeping",
+      "version": "0.1.0",
+      "description": "QBO bank review, reporting, month-end close prep, and accountant handoff.",
+      "skillPath": "skills/quickdeploy/quickbooks-bookkeeping",
+      "contentHash": "dec4c5aa272bf844b7830fe522c6d1e7d039d0e2b61369a80d0f28e31b5e6b29",
+      "labels": ["accounting", "quickbooks", "reporting", "smb"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "docs-2-agent-skills",
+          "isOfficial": true,
+          "tags": [
+            "manifest-backed",
+            "accounting",
+            "quickbooks",
+            "reporting",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 2,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/shopify-store-operator",
+      "version": "0.1.0",
+      "description": "Admin GraphQL store operations with confirm-gated mutations, dev-store default.",
+      "skillPath": "skills/quickdeploy/shopify-store-operator",
+      "contentHash": "9aa773e38ec3e8b616ccbd56c1dcb76717497eab00b450a940a5924a167d38ad",
+      "labels": ["commerce", "graphql", "shopify", "smb"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "graphql-2-agent-skills",
+          "isOfficial": true,
+          "tags": [
+            "manifest-backed",
+            "commerce",
+            "graphql",
+            "shopify",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 4,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/skill-registry-author",
+      "version": "0.1.0",
+      "description": "Author, validate, and publish skills in the agent-skills-registry.",
+      "skillPath": "skills/quickdeploy/skill-registry-author",
+      "contentHash": "895fb21c4b72d1cbbb867d71a93adbe979b937b0a1a76ea0bb060f6fe8e34a97",
+      "labels": ["authoring", "meta", "registry"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "authored",
+          "isOfficial": true,
+          "tags": ["authored", "authoring", "meta", "registry"]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 1,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/smb-cashflow-daily-pulse",
+      "version": "0.2.0",
+      "description": "Read-only daily cash report across Stripe, QuickBooks, Square, and Shopify.",
+      "skillPath": "skills/quickdeploy/smb-cashflow-daily-pulse",
+      "contentHash": "c77cbe7f3e6f54a9004ead9f375217ade62b36673c5f01da1e89677dbbbd66f4",
+      "labels": ["cross-app", "payments", "reporting", "smb"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "authored",
+          "isOfficial": true,
+          "tags": [
+            "authored",
+            "cross-app",
+            "payments",
+            "reporting",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": true,
+          "destructiveCount": 0,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/smb-collections-followup",
+      "version": "0.1.0",
+      "description": "A/R aging across Stripe and QuickBooks with confirm-gated reminders and retries.",
+      "skillPath": "skills/quickdeploy/smb-collections-followup",
+      "contentHash": "fb623caf5441c4e695f7d3d34a1a9c11dd8cfe4c3512e918ed11099e06b45f7e",
+      "labels": [
+        "accounting",
+        "collections",
+        "cross-app",
+        "payments",
+        "smb"
+      ],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "authored",
+          "isOfficial": true,
+          "tags": [
+            "authored",
+            "accounting",
+            "collections",
+            "cross-app",
+            "payments",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 2,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/smb-month-end-close",
+      "version": "0.1.0",
+      "description": "Read-only cross-app close: reconcile processors against the books, build the packet.",
+      "skillPath": "skills/quickdeploy/smb-month-end-close",
+      "contentHash": "9e73052bfb4171e992060517a1cd090bcf8bc3478ea1e4ad0a8f3a342f19ae60",
+      "labels": ["accounting", "cross-app", "reporting", "smb"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "authored",
+          "isOfficial": true,
+          "tags": [
+            "authored",
+            "accounting",
+            "cross-app",
+            "reporting",
+            "smb"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": true,
+          "destructiveCount": 0,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/square-pos-ops",
+      "version": "0.1.0",
+      "description": "Square payments, orders, catalog, inventory, and customers; refunds confirm-gated.",
+      "skillPath": "skills/quickdeploy/square-pos-ops",
+      "contentHash": "5fd0d69077cc8001287ae97166f2ad525d7f6d0e7b152937f10c1479f1e4fc81",
+      "labels": [
+        "commerce",
+        "payments",
+        "pos",
+        "smb",
+        "square"
+      ],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "openapi-2-agent-skills",
+          "isOfficial": true,
+          "tags": [
+            "manifest-backed",
+            "commerce",
+            "payments",
+            "pos",
+            "smb",
+            "square"
+          ]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 1,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "ai.quickdeploy/stripe-payments-operator",
+      "version": "0.1.0",
+      "description": "Sandbox-safe Stripe payments operations with confirm-gated refunds and cancellations.",
+      "skillPath": "skills/quickdeploy/stripe-payments-operator",
+      "contentHash": "729f6a756e119cfc5e054ba748d3340df4039e647402bd283883f602eee43321",
+      "labels": ["payments", "smb", "stripe"],
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "cli-2-agent-skills",
+          "isOfficial": true,
+          "tags": ["manifest-backed", "payments", "smb", "stripe"]
+        },
+        "ai.quickdeploy.registry/safety": {
+          "readOnly": false,
+          "destructiveCount": 2,
+          "sandboxDefault": "sandbox"
+        }
+      }
+    },
+    {
+      "name": "com.microsoft/playwright-cli",
+      "description": "Drive browsers via the Playwright CLI for end-to-end checks and screenshots.",
+      "skillPath": "skills/playwright-cli",
+      "contentHash": "32cf6cf8733ae75ae41f5241347bca74459629f90bcfbd4e25540ede5d4b8f95",
+      "_meta": {
+        "ai.quickdeploy.registry/curation": {
+          "verifiedStatus": "review",
+          "category": "skillset",
+          "isOfficial": false,
+          "tags": ["skillset-pinned", "browser", "external", "testing"]
+        },
+        "ai.quickdeploy.registry/source": {
+          "source": "microsoft/playwright-cli",
+          "sourceType": "github",
+          "skillPath": "skills/playwright-cli/SKILL.md"
+        }
+      }
+    }
+  ],
+  "_meta": {
+    "ai.quickdeploy.registry/generatedBy": "@quickdeployai/skills-cli",
+    "ai.quickdeploy.registry/sourceCount": 10
+  }
+}

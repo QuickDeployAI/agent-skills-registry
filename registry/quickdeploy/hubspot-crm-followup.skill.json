@@ -1,0 +1,87 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/hubspot-crm-followup",
+    "version": "0.1.0",
+    "title": "HubSpot CRM Follow-up",
+    "description": "Read-only HubSpot CRM hygiene: contacts, companies, deals, and follow-up prep.",
+    "labels": ["crm", "hubspot", "read-only", "smb"]
+  },
+  "spec": {
+    "importer": {
+      "engine": "openapi-2-agent-skills",
+      "versionRange": "^0.1.0"
+    },
+    "source": {
+      "type": "http",
+      "uri": "https://raw.githubusercontent.com/HubSpot/HubSpot-public-api-spec-collection/e787dafc569a1f3fdd237f59dd7fb9eec395034c/PublicApiSpecs/CRM/Objects/Rollouts/424/v3/objects.json",
+      "digest": "sha256:9bdc858c65939bb9b5f604becd9b198afc42663f1449747db8b61c9ec29e6022",
+      "ref": "e787dafc569a1f3fdd237f59dd7fb9eec395034c"
+    },
+    "select": {
+      "requests": [
+        {
+          "method": "GET",
+          "uriTemplate": "/crm/v3/objects/{objectType}"
+        },
+        {
+          "method": "GET",
+          "uriTemplate": "/crm/v3/objects/{objectType}/{objectId}"
+        }
+      ]
+    },
+    "config": {
+      "defaults": {
+        "baseUrl": "https://api.hubapi.com",
+        "mode": "read-only"
+      }
+    },
+    "skill": {
+      "name": "hubspot-crm-followup",
+      "description": "Review HubSpot contacts, companies, and deals read-only — find stale leads, lifecycle-stage gaps, and pipeline follow-ups, and draft (never send) outreach for the owner.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "true",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox"
+      }
+    },
+    "safety": {
+      "readOnly": true,
+      "destructiveOperations": [],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "HUBSPOT_LIVE_MODE"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [],
+      "env": [
+        {
+          "name": "HUBSPOT_ACCESS_TOKEN",
+          "description": "Private-app access token with read-only CRM scopes.",
+          "required": true,
+          "secret": true
+        }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/api-endpoints.md",
+        "title": "Generated CRM endpoint reference",
+        "purpose": "Importer-generated read-only endpoints from the pinned HubSpot OpenAPI spec."
+      },
+      {
+        "path": "references/oauth-setup.md",
+        "title": "HubSpot app and token setup",
+        "purpose": "Least-privilege private-app scopes and token handling."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/hubspot-crm-followup"
+    }
+  }
+}

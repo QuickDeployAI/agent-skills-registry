@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quickdeploy.ai/schemas/skills-json.schema.json",
+  "title": "QuickDeploy skills.json catalog",
+  "description": "Generated machine-readable agent-skills catalog. The agents array is the compatibility index consumed by agent-skills-2-mcp; the skills array carries rich registry entries with curation under reverse-DNS _meta keys.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skills", "agents"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentIndexEntry"
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/skillEntry"
+      }
+    },
+    "_meta": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "agentIndexEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill"],
+      "properties": {
+        "skill": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repository-relative path to the skill's SKILL.md (its directory contains the full skill)."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "skillEntry": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "skillPath"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "pattern": "^[a-zA-Z0-9.-]+/[a-zA-Z0-9._-]+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z-.]+)?(?:\\+[0-9A-Za-z-.]+)?$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "skillPath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repository-relative path to the skill directory."
+        },
+        "contentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 over the skill directory contents, aligned with skills-lock.json computedHash semantics."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "_meta": {
+          "type": "object",
+          "additionalProperties": true,
+          "patternProperties": {
+            "^ai\\.quickdeploy\\.registry/": {}
+          }
+        }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["verifiedStatus"] },
+          { "required": ["verified_status"] },
+          { "required": ["category"] },
+          { "required": ["isOfficial"] },
+          { "required": ["is_official"] },
+          { "required": ["isPaid"] },
+          { "required": ["is_paid"] },
+          { "required": ["tags"] },
+          { "required": ["quickdeploy"] },
+          { "required": ["quickDeploy"] },
+          { "required": ["curation"] },
+          { "required": ["manifest"] }
+        ]
+      }
+    }
+  }
+}

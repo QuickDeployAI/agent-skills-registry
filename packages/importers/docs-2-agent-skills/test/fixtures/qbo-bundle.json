@@ -1,0 +1,28 @@
+{
+  "product": "QuickBooks Online",
+  "pages": [
+    {
+      "title": "Categorize bank transactions",
+      "url": "https://quickbooks.intuit.com/learn-support/categorize-bank-transactions",
+      "content": "## Review the For Review tab\n\n1. Open Transactions > Bank transactions.\n2. For each row, accept the suggested category or pick one.\n3. Match transfers to existing entries instead of adding duplicates."
+    },
+    {
+      "title": "Run a Profit and Loss report",
+      "content": "## Steps\n\n1. Open Reports > Profit and Loss.\n2. Set the period and accounting method (cash vs accrual).\n3. Compare to the prior period before sharing."
+    }
+  ],
+  "csvMaps": [
+    {
+      "name": "Invoice export",
+      "description": "Columns in a QuickBooks invoice CSV export.",
+      "columns": [
+        { "name": "Invoice no", "type": "string", "required": true, "validation": "unique per file" },
+        { "name": "Customer", "type": "string", "required": true },
+        { "name": "Invoice date", "type": "date", "required": true, "validation": "MM/DD/YYYY" },
+        { "name": "Due date", "type": "date", "required": false, "validation": "MM/DD/YYYY, >= invoice date" },
+        { "name": "Amount", "type": "decimal", "required": true, "validation": "> 0, two decimal places" },
+        { "name": "Status", "type": "enum", "required": true, "validation": "one of Open, Paid, Overdue" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@quickdeployai/skills-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Build and validate QuickDeploy agent-skills skills.json artifacts.",
+  "bin": {
+    "skills-cli": "./src/cli.mts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "start": "tsx src/cli.mts",
+    "build:registry": "tsx src/cli.mts build",
+    "check:generated": "tsx src/cli.mts build --check",
+    "validate": "tsx src/cli.mts validate",
+    "registry:validate": "tsx src/cli.mts validate",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@quickdeployai/cli-2-agent-skills": "workspace:*",
+    "@quickdeployai/docs-2-agent-skills": "workspace:*",
+    "@quickdeployai/graphql-2-agent-skills": "workspace:*",
+    "@quickdeployai/openapi-2-agent-skills": "workspace:*",
+    "@quickdeployai/skill-core": "workspace:*",
+    "@quickdeployai/skill-registry-schemas": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@quickdeployai/agent-skills-registry-workspace-config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

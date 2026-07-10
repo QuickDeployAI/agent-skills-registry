@@ -1,0 +1,78 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Square Connect API (curated subset)",
+    "version": "2025-06-18",
+    "description": "Curated subset of Square's Connect API covering the operations square-pos-ops uses. The full spec lives at github.com/square/connect-api-specification; keep this subset in sync with the manifest's selections."
+  },
+  "paths": {
+    "/v2/payments": {
+      "get": {
+        "operationId": "ListPayments",
+        "summary": "List payments taken by the account, most recent first.",
+        "parameters": [
+          { "name": "begin_time", "in": "query", "required": false, "description": "RFC 3339 start of the reporting period." },
+          { "name": "end_time", "in": "query", "required": false, "description": "RFC 3339 end of the reporting period." },
+          { "name": "cursor", "in": "query", "required": false, "description": "Pagination cursor from the previous response." },
+          { "name": "limit", "in": "query", "required": false, "description": "Max results per page (max 100)." }
+        ]
+      }
+    },
+    "/v2/payments/{payment_id}": {
+      "get": {
+        "operationId": "GetPayment",
+        "summary": "Retrieve details for a specific payment.",
+        "parameters": [
+          { "name": "payment_id", "in": "path", "required": true, "description": "Unique ID of the payment." }
+        ]
+      }
+    },
+    "/v2/orders/{order_id}": {
+      "get": {
+        "operationId": "RetrieveOrder",
+        "summary": "Retrieve an order, including line items and fulfillment state.",
+        "parameters": [
+          { "name": "order_id", "in": "path", "required": true, "description": "ID of the order to retrieve." }
+        ]
+      }
+    },
+    "/v2/refunds": {
+      "post": {
+        "operationId": "RefundPayment",
+        "summary": "Refund a payment in full or in part.",
+        "parameters": []
+      }
+    },
+    "/v2/catalog/list": {
+      "get": {
+        "operationId": "ListCatalog",
+        "summary": "List catalog objects (items, variations, categories).",
+        "parameters": [
+          { "name": "types", "in": "query", "required": false, "description": "Comma-separated object types, e.g. ITEM,ITEM_VARIATION." },
+          { "name": "cursor", "in": "query", "required": false, "description": "Pagination cursor." }
+        ]
+      }
+    },
+    "/v2/inventory/counts/{catalog_object_id}": {
+      "get": {
+        "operationId": "RetrieveInventoryCount",
+        "summary": "Retrieve current inventory counts for a catalog object.",
+        "parameters": [
+          { "name": "catalog_object_id", "in": "path", "required": true, "description": "Catalog object (variation) ID." },
+          { "name": "location_ids", "in": "query", "required": false, "description": "Comma-separated location IDs to filter by." }
+        ]
+      }
+    },
+    "/v2/customers": {
+      "get": {
+        "operationId": "ListCustomers",
+        "summary": "List customer profiles.",
+        "parameters": [
+          { "name": "cursor", "in": "query", "required": false, "description": "Pagination cursor." },
+          { "name": "limit", "in": "query", "required": false, "description": "Max results per page (max 100)." },
+          { "name": "sort_field", "in": "query", "required": false, "description": "DEFAULT or CREATED_AT." }
+        ]
+      }
+    }
+  }
+}

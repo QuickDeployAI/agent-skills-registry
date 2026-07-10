@@ -1,0 +1,73 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/smb-collections-followup",
+    "version": "0.1.0",
+    "title": "SMB Collections Follow-up",
+    "description": "A/R aging across Stripe and QuickBooks with confirm-gated reminders and retries.",
+    "labels": ["accounting", "collections", "cross-app", "payments", "smb"]
+  },
+  "spec": {
+    "source": {
+      "type": "file",
+      "uri": "skills/quickdeploy/smb-collections-followup"
+    },
+    "skill": {
+      "name": "smb-collections-followup",
+      "description": "Chase overdue receivables across Stripe and QuickBooks — build the aging picture, draft payment reminders, and prepare escalations — with every outbound send and payment retry confirm-gated.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "false",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/destructive-ops": "send-reminder,retry-payment",
+        "ai.quickdeploy.skills/requires": "stripe-payments-operator,quickbooks-bookkeeping"
+      }
+    },
+    "safety": {
+      "readOnly": false,
+      "destructiveOperations": [
+        {
+          "name": "send-reminder",
+          "description": "Sends a payment reminder to a customer.",
+          "confirmation": "explicit"
+        },
+        {
+          "name": "retry-payment",
+          "description": "Retries a failed card payment via the Stripe operator flow.",
+          "confirmation": "explicit"
+        }
+      ],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "STRIPE_LIVE_MODE"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [
+        {
+          "name": "stripe",
+          "kind": "cli",
+          "installHint": "https://docs.stripe.com/stripe-cli"
+        }
+      ],
+      "env": [
+        { "name": "STRIPE_API_KEY", "description": "Stripe secret key; test keys by default.", "required": true, "secret": true },
+        { "name": "QBO_REFRESH_TOKEN", "description": "QuickBooks OAuth2 refresh token (sandbox company by default).", "required": false, "secret": true }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/reminder-templates.md",
+        "title": "Reminder templates",
+        "purpose": "Stage-by-stage reminder drafts with tone guardrails."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/smb-collections-followup"
+    }
+  }
+}

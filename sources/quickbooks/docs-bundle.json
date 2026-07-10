@@ -1,0 +1,50 @@
+{
+  "product": "QuickBooks Online",
+  "pages": [
+    {
+      "title": "Categorize bank transactions",
+      "url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/banking/categorize-online-bank-transactions-quickbooks/L1tKQwlPe_US_en_US",
+      "content": "## Review the For Review tab\n\n1. Open **Transactions → Bank transactions** and select the account.\n2. Work newest-first through the *For Review* tab.\n3. For each row: accept QuickBooks' suggested category when it matches the vendor's history; otherwise pick the correct expense/income account.\n4. Use **Match** (not Add) when the transaction corresponds to an existing invoice, bill, or transfer — adding creates duplicates.\n5. Split transactions that cover multiple categories (button: *Split*).\n\n## Rules of thumb\n\n- Transfers between own accounts are matched as transfers, never income.\n- Owner draws/contributions go to equity accounts, not expenses.\n- When unsure, park the row in *Ask My Accountant* rather than guessing."
+    },
+    {
+      "title": "Run Profit and Loss and cash-flow reports",
+      "url": "https://quickbooks.intuit.com/learn-support/en-us/help-article/financial-reports/run-profit-loss-report-quickbooks-online/L1SGwoNzd_US_en_US",
+      "content": "## Profit and Loss\n\n1. Open **Reports → Profit and Loss**.\n2. Set the period and the accounting method (cash vs accrual) the business actually uses — do not mix methods across periods.\n3. Compare to the prior period and prior year; investigate any line that moved more than 20%.\n\n## Statement of Cash Flows\n\n1. Open **Reports → Statement of Cash Flows** for the same period.\n2. Reconcile the ending cash with the bank balances before sharing.\n3. Flag operating cash flow that is negative while P&L shows profit — usually receivables growing faster than collections."
+    },
+    {
+      "title": "Month-end close checklist",
+      "content": "## Close the books each month\n\n1. Categorize or match every bank/credit-card transaction (For Review must be empty).\n2. Reconcile each bank and credit-card account against its statement (**Settings → Reconcile**); resolve every discrepancy, never force-adjust.\n3. Review A/R aging (invoices) and A/P aging (bills) for anything overdue or duplicated.\n4. Verify undeposited funds is empty or explained.\n5. Attach missing receipts to expenses over the business's receipt threshold.\n6. Run P&L, Balance Sheet, and Statement of Cash Flows; compare to prior month.\n7. Set the closing date (**Settings → Advanced → Close the books**) with a password so closed periods can't drift."
+    },
+    {
+      "title": "Accountant handoff",
+      "content": "## Prepare the accountant packet\n\n1. Confirm the close checklist above is complete for the period.\n2. Export: P&L, Balance Sheet, Statement of Cash Flows, A/R aging, A/P aging, and the general ledger for the period (each report's Export button → CSV/Excel).\n3. List open questions (uncategorized rows parked in *Ask My Accountant*, unusual swings, new accounts added).\n4. Invite the accountant (**Settings → Manage users → Accounting firms**) instead of sharing credentials."
+    }
+  ],
+  "csvMaps": [
+    {
+      "name": "Invoice export",
+      "description": "Columns in a QuickBooks Online invoice CSV export, used for collections review and reconciliation.",
+      "columns": [
+        { "name": "Invoice no", "type": "string", "required": true, "validation": "unique per file" },
+        { "name": "Customer", "type": "string", "required": true },
+        { "name": "Invoice date", "type": "date", "required": true, "validation": "MM/DD/YYYY" },
+        { "name": "Due date", "type": "date", "required": true, "validation": "MM/DD/YYYY, >= invoice date" },
+        { "name": "Amount", "type": "decimal", "required": true, "validation": "> 0, two decimal places" },
+        { "name": "Open balance", "type": "decimal", "required": true, "validation": ">= 0, <= Amount" },
+        { "name": "Status", "type": "enum", "required": true, "validation": "one of Open, Paid, Overdue, Voided" }
+      ]
+    },
+    {
+      "name": "Transactions export",
+      "description": "Columns in a bank-register CSV export, used to cross-check processor payouts (e.g. Stripe) against book entries.",
+      "columns": [
+        { "name": "Date", "type": "date", "required": true, "validation": "MM/DD/YYYY" },
+        { "name": "Transaction type", "type": "string", "required": true },
+        { "name": "Payee", "type": "string", "required": false },
+        { "name": "Account", "type": "string", "required": true },
+        { "name": "Memo", "type": "string", "required": false },
+        { "name": "Amount", "type": "decimal", "required": true, "validation": "non-zero, two decimal places; negative = money out" }
+      ]
+    }
+  ]
+}

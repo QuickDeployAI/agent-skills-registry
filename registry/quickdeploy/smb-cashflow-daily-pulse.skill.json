@@ -1,0 +1,65 @@
+{
+  "apiVersion": "quickdeploy.ai/v1",
+  "kind": "SkillManifest",
+  "metadata": {
+    "name": "ai.quickdeploy/smb-cashflow-daily-pulse",
+    "version": "0.2.0",
+    "title": "SMB Cashflow Daily Pulse",
+    "description": "Read-only daily cash report across Stripe, QuickBooks, Square, and Shopify.",
+    "labels": ["cross-app", "payments", "reporting", "smb"]
+  },
+  "spec": {
+    "source": {
+      "type": "file",
+      "uri": "skills/quickdeploy/smb-cashflow-daily-pulse"
+    },
+    "skill": {
+      "name": "smb-cashflow-daily-pulse",
+      "description": "Produce a small business's daily cash pulse — balance, payouts, failed payments, receivables/payables, sales, low inventory, and near-term cash risk — strictly read-only across Stripe, QuickBooks, Square, and Shopify.",
+      "license": "MIT",
+      "metadata": {
+        "ai.quickdeploy.skills/read-only": "true",
+        "ai.quickdeploy.skills/sandbox-default": "sandbox",
+        "ai.quickdeploy.skills/requires": "stripe-payments-operator,quickbooks-bookkeeping,square-pos-ops,shopify-store-operator"
+      }
+    },
+    "safety": {
+      "readOnly": true,
+      "destructiveOperations": [],
+      "sandbox": {
+        "supported": true,
+        "defaultMode": "sandbox",
+        "switchEnvVar": "STRIPE_LIVE_MODE"
+      },
+      "secretsPolicy": "env-names-only"
+    },
+    "requirements": {
+      "tools": [
+        {
+          "name": "stripe",
+          "kind": "cli",
+          "installHint": "https://docs.stripe.com/stripe-cli"
+        }
+      ],
+      "env": [
+        {
+          "name": "STRIPE_API_KEY",
+          "description": "Stripe secret key; test keys (sk_test_*) by default.",
+          "required": true,
+          "secret": true
+        }
+      ]
+    },
+    "references": [
+      {
+        "path": "references/report-template.md",
+        "title": "Cash pulse report template",
+        "purpose": "Exact report shape and formatting rules."
+      }
+    ],
+    "scripts": [],
+    "output": {
+      "path": "skills/quickdeploy/smb-cashflow-daily-pulse"
+    }
+  }
+}
