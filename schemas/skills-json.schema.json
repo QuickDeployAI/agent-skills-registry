@@ -84,6 +84,11 @@
         "_meta": {
           "type": "object",
           "additionalProperties": true,
+          "properties": {
+            "ai.quickdeploy.registry/monetization": {
+              "$ref": "#/$defs/monetization"
+            }
+          },
           "patternProperties": {
             "^ai\\.quickdeploy\\.registry/": {}
           }
@@ -102,9 +107,62 @@
           { "required": ["quickdeploy"] },
           { "required": ["quickDeploy"] },
           { "required": ["curation"] },
-          { "required": ["manifest"] }
+          { "required": ["manifest"] },
+          { "required": ["monetization"] },
+          { "required": ["pricing"] },
+          { "required": ["acceptedProtocols"] },
+          { "required": ["accepted_protocols"] },
+          { "required": ["x402"] }
         ]
       }
+    },
+    "monetization": {
+      "type": "object",
+      "required": ["pricing"],
+      "properties": {
+        "pricing": {
+          "type": "object",
+          "required": ["model"],
+          "properties": {
+            "model": {
+              "enum": ["per-request", "metered", "subscription", "one-time"]
+            },
+            "price": {
+              "type": "string",
+              "pattern": "^\\d+(\\.\\d+)?$",
+              "description": "Decimal USD string, e.g. \"0.01\". Omitted for metered (rate-card) pricing."
+            },
+            "currency": { "const": "USD", "default": "USD" }
+          },
+          "additionalProperties": false
+        },
+        "acceptedProtocols": {
+          "type": "array",
+          "items": {
+            "enum": ["a2h", "x402", "l402", "mpp", "ap2", "acp", "ucp"]
+          },
+          "default": [],
+          "description": "Agentic payment protocols the capability accepts (enforced by the capability gateway)."
+        },
+        "x402": {
+          "type": "object",
+          "properties": {
+            "networks": {
+              "type": "array",
+              "items": { "enum": ["base", "base-sepolia"] },
+              "default": ["base"]
+            },
+            "asset": { "const": "USDC", "default": "USDC" },
+            "payTo": {
+              "type": "string",
+              "description": "Public receiving wallet address (NOT a secret)."
+            }
+          },
+          "additionalProperties": false,
+          "description": "x402-specific advertisement (public, non-secret)."
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
